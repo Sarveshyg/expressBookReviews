@@ -8,7 +8,7 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 
-// Register a new user
+// Register
 public_users.post("/register", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -37,12 +37,15 @@ public_users.post("/register", (req, res) => {
 
 
 // =====================================================
-// TASK 10 - Get all books using Async/Await and Axios
+// TASK 10 - Get all books using Async/Await + Axios
 // =====================================================
 
 public_users.get('/', async function (req, res) {
   try {
-    const response = await axios.get('http://localhost:5000/internal/books');
+    const response = await axios.get(
+      'http://localhost:5000/internal/books'
+    );
+
     return res.status(200).json(response.data);
   } catch (error) {
     return res.status(500).json({
@@ -52,25 +55,27 @@ public_users.get('/', async function (req, res) {
 });
 
 
-// Internal route for Task 10
+// Internal data endpoint
 public_users.get('/internal/books', function (req, res) {
   return res.status(200).json(books);
 });
 
 
 // =====================================================
-// TASK 11 - Get book by ISBN using Promises and Axios
+// TASK 11 - Get book by ISBN using Promise + Axios
 // =====================================================
 
 public_users.get('/isbn/:isbn', function (req, res) {
   const isbn = req.params.isbn;
 
   axios
-    .get(`http://localhost:5000/internal/isbn/${encodeURIComponent(isbn)}`)
-    .then((response) => {
+    .get(
+      `http://localhost:5000/internal/isbn/${encodeURIComponent(isbn)}`
+    )
+    .then(function (response) {
       return res.status(200).json(response.data);
     })
-    .catch((error) => {
+    .catch(function (error) {
       if (error.response && error.response.status === 404) {
         return res.status(404).json({
           message: "Book not found"
@@ -84,7 +89,7 @@ public_users.get('/isbn/:isbn', function (req, res) {
 });
 
 
-// Internal route for Task 11
+// Internal data endpoint
 public_users.get('/internal/isbn/:isbn', function (req, res) {
   const isbn = req.params.isbn;
 
@@ -99,8 +104,7 @@ public_users.get('/internal/isbn/:isbn', function (req, res) {
 
 
 // =====================================================
-// TASK 12 - Get books by author using Async/Await
-// and Axios
+// TASK 12 - Get books by author using Async/Await + Axios
 // =====================================================
 
 public_users.get('/author/:author', async function (req, res) {
@@ -120,14 +124,12 @@ public_users.get('/author/:author', async function (req, res) {
 });
 
 
-// Internal route for Task 12
+// Internal data endpoint
 public_users.get('/internal/author/:author', function (req, res) {
   const author = req.params.author;
   const result = {};
 
-  const keys = Object.keys(books);
-
-  keys.forEach((key) => {
+  Object.keys(books).forEach(function (key) {
     if (books[key].author === author) {
       result[key] = books[key];
     }
@@ -138,8 +140,7 @@ public_users.get('/internal/author/:author', function (req, res) {
 
 
 // =====================================================
-// TASK 13 - Get books by title using Async/Await
-// and Axios
+// TASK 13 - Get books by title using Async/Await + Axios
 // =====================================================
 
 public_users.get('/title/:title', async function (req, res) {
@@ -159,14 +160,12 @@ public_users.get('/title/:title', async function (req, res) {
 });
 
 
-// Internal route for Task 13
+// Internal data endpoint
 public_users.get('/internal/title/:title', function (req, res) {
   const title = req.params.title;
   const result = {};
 
-  const keys = Object.keys(books);
-
-  keys.forEach((key) => {
+  Object.keys(books).forEach(function (key) {
     if (books[key].title === title) {
       result[key] = books[key];
     }
